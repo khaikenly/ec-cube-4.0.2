@@ -9,15 +9,12 @@ composer.phar
 !/app/cache/.gitkeep
 /app/log/*
 !/app/log/.gitkeep
-/app/Plugin/*
 !/app/Plugin/.gitkeep
 !/app/Plugin/ExamplePlugin
 /app/PluginData/*
 !/app/PluginData/.gitkeep
-/app/template/*
 !/app/template/admin
 !/app/template/default
-/html/plugin/*
 !/html/plugin/.gitkeep
 /html/install/temp/*
 /html/upload/save_image/*
