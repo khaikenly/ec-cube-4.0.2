@@ -5,8 +5,6 @@ networks:
     driver: bridge
 
 volumes:
-  pg-database:
-    driver: local
   mysql-database:
     driver: local
   mailcatcher-data:
@@ -24,31 +22,17 @@ services:
     build:
       context: .
       args:
-        # ビルド時のECCubeインストールスクリプトをスキップする場合にtrueを指定する。
-        # ビルド時点でDBサーバの起動や接続が出来ない、という場合等にエラーとなるため。
         SKIP_INSTALL_SCRIPT_ON_DOCKER_BUILD: "true"
     ports:
-      - 8083:80
-      - 4433:443
+      - 8085:80
+      - 4435:443
     volumes:
       - "./:/var/www/html:cached"
-      ### 同期対象からコストの重いフォルダを除外 #####################
       - "var:/var/www/html/var"
       - "vendor:/var/www/html/vendor"
-    networks:
-      - backend-eccube
-
-  ### Postgres ################################
-  postgres:
-    image: postgres:10
-    environment:
-      - POSTGRES_DB=eccubedb
-      - POSTGRES_USER=dbuser
-      - POSTGRES_PASSWORD=secret
-    ports:
-      - 15432:5432
-    volumes:
-      - pg-database:/var/lib/postgresql/data
+      - type: bind
+        source: ./var/log
+        target: /var/www/html/var/log
     networks:
       - backend-eccube
 
@@ -63,15 +47,9 @@ services:
     volumes:
       - mysql-database:/var/lib/mysql
     ports:
-      - 13306:3306
+      - 13308:3306
     networks:
       - backend-eccube
 
-  ### Mailcatcher ##################################
-  mailcatcher:
-    image: schickling/mailcatcher
-    ports:
-      - "1080:1080"
-      - "1025:1025"
-    networks:
-      - backend-eccube
+#### COPY FILE IN CONTAINER TO HOST - RUN COMMAND WITH ADMINISTRATOR
+#docker cp ec-cube-dev-test_ec-cube_1:/var/www/html/vendor ./

@@ -11,7 +11,6 @@ RUN apt-get update \
     debconf-utils \
     gcc \
     git \
-    vim \
     gnupg2 \
     libfreetype6-dev \
     libicu-dev \
@@ -66,6 +65,7 @@ RUN curl -sS https://getcomposer.org/installer \
   | php \
   && mv composer.phar /usr/bin/composer \
   && composer selfupdate --1
+  #đây là bản composer 1 - update bằng lệnh composer selfupdate --2 để lên version 2 - Use composer self-update --rollback to return to version 1
 
 # 全体コピー前にcomposer installを先行完了させる(docker cache利用によるリビルド速度向上)
 USER www-data
