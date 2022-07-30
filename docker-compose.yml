@@ -7,8 +7,6 @@ networks:
 volumes:
   mysql-database:
     driver: local
-  mailcatcher-data:
-    driver: local
 
   ### ignore folder volume #####
   var:
@@ -17,6 +15,21 @@ volumes:
     driver: local
 
 services:
+  ### MySQL ##################################
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql-database:/var/lib/mysql
+    ports:
+      - 13308:3306
+    networks:
+      - backend-eccube
+
   ### ECCube4 ##################################
   ec-cube:
     build:
@@ -33,21 +46,7 @@ services:
       - type: bind
         source: ./var/log
         target: /var/www/html/var/log
-    networks:
-      - backend-eccube
-
-  ### MySQL ##################################
-  mysql:
-    image: mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: eccubedb
-      MYSQL_USER: dbuser
-      MYSQL_PASSWORD: secret
-    volumes:
-      - mysql-database:/var/lib/mysql
-    ports:
-      - 13308:3306
+    command: /bin/sh -c "/var/www/html/dockerbuild/init-plugin.sh"
     networks:
       - backend-eccube
 

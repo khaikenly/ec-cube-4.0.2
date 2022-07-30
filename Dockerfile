@@ -106,4 +106,7 @@ RUN if [ ! -f ${APACHE_DOCUMENT_ROOT}/var/eccube.db ] && [ ! ${SKIP_INSTALL_SCRI
         composer run-script installer-scripts && composer run-script auto-scripts \
         ; fi
 
+# init database
+CMD ["/var/www/html/dockerbuild/init-database.sh"]
+
 USER root
